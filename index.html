@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لـ زوزتي  ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-rose: #ff7675;
+            --dark-rose: #d63031;
+            --soft-bg: #fff5f6;
+            --cream-white: #ffffff;
+            --text-dark: #2d3436;
+            --text-gray: #636e72;
+            --accent-gold: #fdcb6e;
+            --shadow-color: rgba(214, 48, 49, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--soft-bg);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(255, 118, 117, 0.1) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(253, 203, 110, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 580px;
+            background: var(--cream-white);
+            border-radius: 35px;
+            box-shadow: 0 20px 50px var(--shadow-color);
+            border: 3px solid rgba(255, 118, 117, 0.15);
+            padding: 35px 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .view-page {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: slideIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .view-page.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 118, 117, 0.25);
+            font-size: 20px;
+            animation: floatUp 8s linear infinite;
+            bottom: -50px;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .btn-style {
+            background: linear-gradient(135deg, var(--primary-rose), var(--dark-rose));
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(214, 48, 49, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 25px;
+            outline: none;
+            width: 100%;
+        }
+
+        .btn-style:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(214, 48, 49, 0.4);
+        }
+
+        .intro-heart {
+            font-size: 70px;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.18); }
+            100% { transform: scale(1); }
+        }
+
+        .page-title {
+            color: var(--dark-rose);
+            font-size: 2.1rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .page-subtitle {
+            color: var(--text-gray);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .loading-container { width: 100%; margin-top: 30px; }
+        .loading-bar-outer {
+            width: 100%; height: 14px; background-color: #f1f2f6;
+            border-radius: 10px; overflow: hidden;
+            border: 1px solid rgba(255, 118, 117, 0.2); margin-bottom: 20px;
+        }
+        .loading-bar-inner {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--primary-rose), var(--accent-gold));
+            border-radius: 10px; transition: width 0.4s ease;
+        }
+        .loading-status-text {
+            font-size: 1.2rem; font-weight: 700; color: var(--text-dark);
+            min-height: 40px; transition: all 0.3s ease;
+        }
+        .loading-icon {
+            font-size: 45px; margin-bottom: 15px;
+            animation: rotate 2s linear infinite;
+        }
+        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .messages-letter {
+            background-color: #fffaf0; border: 2px dashed var(--primary-rose);
+            border-radius: 20px; padding: 25px 20px; margin-bottom: 25px;
+            position: relative; width: 100%;
+        }
+        .messages-letter::before {
+            content: "💌"; position: absolute; top: -20px; right: 20px; font-size: 30px;
+        }
+        .letter-content {
+            font-size: 1.15rem; color: #2c3e50; line-height: 1.9; font-weight: 600;
+        }
+
+        .gifts-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 20px; width: 100%; margin-top: 20px;
+        }
+        .gift-box-item {
+            background: var(--soft-bg); border: 2px solid rgba(255, 118, 117, 0.2);
+            border-radius: 20px; padding: 20px 10px; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; min-height: 130px; position: relative; overflow: hidden;
+        }
+        .gift-box-item:hover {
+            transform: scale(1.05); border-color: var(--primary-rose);
+            box-shadow: 0 10px 15px rgba(255, 118, 117, 0.1);
+        }
+        .gift-icon { font-size: 40px; transition: transform 0.3s ease; }
+        .gift-box-item.opened .gift-icon { transform: scale(0); display: none; }
+        .gift-text { font-size: 0.95rem; font-weight: 700; color: var(--primary-rose); margin-top: 10px; }
+        .gift-reward-text {
+            display: none; font-size: 1rem; font-weight: 700; color: var(--text-dark);
+            text-align: center; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; padding: 10px;
+        }
+        .gift-box-item.opened .gift-reward-text { display: block; }
+        .gift-box-item.opened { background-color: #fff9eb; border-color: var(--accent-gold); }
+
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        /* معرض الصور المطور - شبكة 8 صور */
+        .photos-grid-v3 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            margin-top: 15px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-left: 5px;
+        }
+        .photo-card {
+            border-radius: 18px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 118, 117, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 110px;
+            position: relative;
+        }
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .photo-card:hover {
+            transform: scale(1.04);
+            border-color: var(--primary-rose);
+            box-shadow: 0 8px 15px var(--shadow-color);
+        }
+        .photos-grid-v3::-webkit-scrollbar { width: 6px; }
+        .photos-grid-v3::-webkit-scrollbar-thumb { background: var(--primary-rose); border-radius: 10px; }
+
+        /* Lightbox Overlay */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .lightbox-content {
+            max-width: 95%;
+            max-height: 65%;
+            border-radius: 20px;
+            border: 4px solid white;
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+            animation: zoomIn 0.3s ease;
+            object-fit: contain;
+        }
+        #lightbox-caption {
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-top: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-rose), var(--dark-rose));
+            padding: 12px 25px;
+            border-radius: 30px;
+            max-width: 85%;
+            line-height: 1.6;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .close-lightbox {
+            position: absolute;
+            top: 25px; right: 25px;
+            color: white; font-size: 45px; cursor: pointer;
+            font-weight: bold; transition: 0.3s;
+        }
+        .close-lightbox:hover { color: var(--primary-rose); }
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Quiz Styling */
+        .quiz-options-container {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .quiz-option {
+            flex: 1;
+            background: #ffffff;
+            border: 3px solid rgba(255, 118, 117, 0.15);
+            border-radius: 18px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.02);
+        }
+        .quiz-option img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        .quiz-option .quiz-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-top: 8px;
+        }
+        .quiz-option:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-rose);
+        }
+        .quiz-option.correct {
+            border-color: #2ed573;
+            background-color: #e8fbf0;
+            box-shadow: 0 5px 15px rgba(46, 213, 115, 0.2);
+        }
+        .quiz-option.wrong {
+            border-color: var(--dark-rose);
+            background-color: #ffebeb;
+            opacity: 0.7;
+        }
+
+        .btn-success-end { background: linear-gradient(135deg, #2ed573, #26af58); box-shadow: 0 10px 20px rgba(46, 213, 115, 0.3); }
+        .btn-fail-end { background: linear-gradient(135deg, #ffa502, #ff7f50); box-shadow: 0 10px 20px rgba(255, 127, 80, 0.3); margin-top: 15px !important; }
+
+        #toast-container {
+            position: fixed; bottom: 25px; right: 25px; z-index: 999;
+            width: 320px; max-width: calc(100vw - 50px);
+        }
+        .custom-toast {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+            border-right: 6px solid var(--primary-rose); border-radius: 16px;
+            padding: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 10px; display: flex; align-items: center; cursor: pointer;
+            transform: translateX(120%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s; opacity: 0;
+        }
+        .custom-toast.show { transform: translateX(0); opacity: 1; }
+        .toast-icon { font-size: 28px; margin-left: 12px; }
+        .toast-body { flex-grow: 1; }
+        .toast-title { font-weight: 700; font-size: 0.95rem; color: var(--primary-rose); }
+        .toast-message { font-size: 0.85rem; color: var(--text-dark); margin-top: 2px; font-weight: 600; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
+            display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px;
+        }
+        .modal-card {
+            background: var(--cream-white); border-radius: 25px; padding: 30px;
+            text-align: center; max-width: 400px; width: 100%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 2px solid var(--primary-rose);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .modal-emoji { font-size: 50px; margin-bottom: 15px; }
+        .modal-title { font-size: 1.35rem; font-weight: 700; color: var(--dark-rose); margin-bottom: 10px; }
+        .modal-text { font-size: 1.05rem; color: var(--text-dark); font-weight: 600; line-height: 1.6; margin-bottom: 20px; }
+        .btn-close-modal {
+            background-color: var(--text-dark); color: white; border: none;
+            padding: 10px 25px; font-size: 0.95rem; border-radius: 50px;
+            cursor: pointer; font-weight: 700;
+        }
+
+        .footer-logo { font-size: 0.85rem; color: var(--text-gray); font-weight: 600; margin-top: 20px; opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts" id="bgHearts"></div>
+    <div id="toast-container"></div>
+
+    <!-- Lightbox لـ عرض الصور كاملة مع الكابشن -->
+    <div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" alt="صورة مكبرة">
+        <div id="lightbox-caption">كابشن الصورة</div>
+    </div>
+
+    <!-- المودال (التنبيهات اللطيفة) -->
+    <div class="modal-overlay" id="customModal">
+        <div class="modal-card">
+            <div class="modal-emoji" id="modalEmoji">🎉</div>
+            <div class="modal-title" id="modalTitle">عنوان التنبيه</div>
+            <div class="modal-text" id="modalText">الرسالة</div>
+            <button class="btn-close-modal" id="modalBtn" onclick="closeModal()">إغلاق</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        
+        <!-- الصفحة 1: المقدمة -->
+        <div class="view-page active" id="page-1">
+            <div class="intro-heart">💖</div>
+            <h1 class="page-title">هاي زوزتي♥</h1>
+            <p class="page-subtitle">عارفه انك مخنوق شويه وحاولت اعملك حاجه مختلفه المرادي يمكن اعرف افكك شويه حتى وفك التكشيره دي بقا حبيب مامي مينفعش اشوفه غير مبسوط بس</p>
+            <button class="btn-style" onclick="startFlow()">ادخل عشان تروّق ✨</button>
+        </div>
+
+        <!-- الصفحة 2: التحميل -->
+        <div class="view-page" id="page-2">
+            <div class="loading-icon" id="loaderIcon">📡</div>
+            <h2 class="page-title" style="font-size: 1.8rem;">فحص الاتصال والأنظمة</h2>
+            <div class="loading-container">
+                <div class="loading-status-text" id="loadingStatusText">بدء الإجراءات...</div>
+                <div class="loading-bar-outer"><div class="loading-bar-inner" id="loadingBar"></div></div>
+            </div>
+            <button class="btn-style" id="btnGoToTherapy" style="display: none;" onclick="goToPage(3)">ابدأ رحلة العلاج 🩺</button>
+        </div>
+
+        <!-- الصفحة 3: رسائل العلاج -->
+        <div class="view-page" id="page-3">
+            <div class="intro-heart" style="font-size: 50px;">🌟</div>
+            <h2 class="page-title" style="font-size: 1.8rem;">بحبك ❤️</h2>
+            <div class="messages-letter">
+                <p class="letter-content" id="letterContent">
+                    خليك عاارف اني جمبك دايما وعايشه عشانك وعشان اشوفك مبسوط وفي ضهرك دايما يحبيبي ومعاك في كل حاجه وياريت خنقتك وتعبك دول اعرف اخدهم ليا انا والله ومشوفش فيك انت اي حاجه وحشه ينن عيوني، وعيونك الحلوين دول مينفعش يزعلو اصلا ف اضحك كدا بقا عشان ضحكتك هي االلي بتحلي الدنيا كلها
+                </p>
+            </div>
+            <button class="btn-style" onclick="goToPage(4)">يلا نكمل يحبيب مامي ولا زهقت😡</button>
+        </div>
+
+        <!-- الصفحة 4: علب الهدايا -->
+        <div class="view-page" id="page-4">
+            <div class="intro-heart" style="font-size: 50px; animation-duration: 2s;">🎁</div>
+            <h2 class="page-title" style="font-size: 1.7rem;">صندوق جوائز زوزتي</h2>
+            
+            <div class="gifts-grid">
+                <div class="gift-box-item" onclick="openGift(this, '🤗 كسبت حضن دافي وطويل من مامي!')">
+                    <div class="gift-icon">🎁</div><div class="gift-text">الهدية الأولى</div><div class="gift-reward-text"></div>
+                </div>
+                <div class="gift-box-item" onclick="openGift(this, '💋 كسبت أحلى وأرق بوسة في الدنيا!')">
+                    <div class="gift-icon">🎁</div><div class="gift-text">الهدية الثانية</div><div class="gift-reward-text"></div>
+                </div>
+                <div class="gift-box-item" onclick="openGift(this, '🚗 كسبت خروجة رايقة ع حساب بنوتك!')">
+                    <div class="gift-icon">🎁</div><div class="gift-text">الهدية الثالثة</div><div class="gift-reward-text"></div>
+                </div>
+                <div class="gift-box-item" onclick="openGift(this, ' كسبت أكلتك المفضله من ايد نونتك!')">
+                    <div class="gift-icon">🎁</div><div class="gift-text">الهدية الرابعة</div><div class="gift-reward-text"></div>
+                </div>
+            </div>
+            <button class="btn-style" onclick="goToPage(5)">كمل لصفحة الصور الرومانسية 😉📸</button>
+        </div>
+
+        <!-- الصفحة 5 (المعدلة): شبكة الـ 8 صور المكتوبة -->
+        <div class="view-page" id="page-5">
+            <div class="intro-heart" style="font-size: 50px;">📸</div>
+            <h2 class="page-title" style="font-size: 1.7rem;">ألبوم ذكرياتنا </h2>
+            <p class="page-subtitle" style="font-size: 0.95rem; margin-bottom: 10px;">اضغط على أي صورة عشان تكبرها وتشوف المسدج المكتوبة عليها 💌</p>
+            
+            <div class="photos-grid-v3">
+                <div class="photo-card" onclick="zoomPhoto('photo1.jpg', 'اول صوره لينا سوا واول ديت 💖')">
+                    <img src="photo1.jpg" alt="صورة 1" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+الأولى'">
+                </div>
+                <div class="photo-card" onclick="zoomPhoto('photo2.jpg', 'ربنا يخليلي حضنك اللي بيطمني دايما 🥰')">
+                    <img src="photo2.jpg" alt="صورة 2" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+الثانية'">
+                </div>
+                <div class="photo-card" onclick="zoomPhoto('photo3.jpg', 'الصوره المعتاده في كل خروجه بس عسل والله😂')">
+                    <img src="photo3.jpg" alt="صورة 3" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+الثالثة'">
+                </div>
+                <div class="photo-card" onclick="zoomPhoto('photo4.jpg', 'بدايه تحقيق حلمنا 💍🤵👰')">
+                    <img src="photo4.jpg" alt="صورة 4" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+الرابعة'">
+                </div>
+                <div class="photo-card" onclick="zoomPhoto('photo5.jpg', 'احلى يوم في حياتي 🎉♥')">
+                    <img src="photo5.jpg" alt="صورة 5" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+الخامسة'">
+                </div>
+                <div class="photo-card" onclick="zoomPhoto('photo6.jpg', 'الذ يوم والله 😂🍭')">
+                    <img src="photo6.jpg" alt="صورة 6" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+السادسة'">
+                </div>
+                <div class="photo-card" onclick="zoomPhoto('photo7.jpg', 'اول صوره واحنا واقفين تقريبا بعيدا عن صور خطوبتنا😂♥')">
+                    <img src="photo7.jpg" alt="صورة 7" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+السابعة'">
+                </div>
+                <div class="photo-card" onclick="zoomPhoto('photo8.jpg', 'احلى ماتشي مع احلى زوزتي 💖👕👚')">
+                    <img src="photo8.jpg" alt="صورة 8" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+الثامنة'">
+                </div>
+            </div>
+            
+            <p style="font-size: 0.75rem; color: #888; margin-top: 10px;"></p>
+            <button class="btn-style" onclick="goToPage(6)">التالي: كمل لصفحة الفيديو 🎥</button>
+        </div>
+
+        <!-- الصفحة 6 (الجديدة): الفيديو الخاص -->
+        <div class="view-page" id="page-6">
+            <div class="intro-heart" style="font-size: 50px;">🎥</div>
+            <h2 class="page-title" style="font-size: 1.7rem;">فيديو معمولك بحب</h2>
+            <p class="page-subtitle" style="font-size: 0.95rem; margin-bottom: 10px;">شغل الفيديو اللطيف ده اللي بيجمع ذكرياتنا 👇🎬</p>
+            
+            <div style="width: 100%; border-radius: 20px; overflow: hidden; border: 3px solid var(--primary-rose); box-shadow: 0 10px 25px var(--shadow-color);">
+                <video controls style="width: 100%; display: block;" id="myVideo">
+                    <source src="video.mp4" type="video/mp4">
+                    متصفحك لا يدعم مشغل الفيديو.
+                </video>
+            </div>
+            
+            <p style="font-size: 0.75rem; color: #888; margin-top: 10px;"></p>
+            <button class="btn-style" onclick="pauseVideoAndGoNext()">التالي: أغنية مني ليك 🎵</button>
+        </div>
+
+        <!-- الصفحة 7 (الجديدة): صفحة الأغنية والكلام العسل -->
+        <div class="view-page" id="page-7">
+            <div class="intro-heart" style="font-size: 50px;">🎶</div>
+            <h2 class="page-title" style="font-size: 1.7rem;"> 🥰</h2>
+            
+            <div style="width: 100%; margin: 15px 0; background: #fffaf0; padding: 15px; border-radius: 20px; border: 2px dashed var(--primary-rose);">
+                <p style="font-size: 0.95rem; font-weight: 700; color: var(--dark-rose); margin-bottom: 10px;">شغّل النغمة اللي بتفكرني بيك 👇</p>
+                <audio controls style="width: 100%;" id="myAudio">
+                    <source src="song.mp3" type="audio/mpeg">
+                    متصفحك لا يدعم مشغل الصوت.
+                </audio>
+            </div>
+
+            <!-- الكارت اللي تحته الكلام الحلو الخاص بالأغنية -->
+            <div class="messages-letter" style="background-color: #fffaf0; border-color: var(--accent-gold); margin-bottom: 15px; padding: 20px 15px;">
+                <p class="letter-content" style="color: var(--dark-rose); font-size: 1.25rem; font-weight: 800; text-shadow: 1px 1px 2px rgba(0,0,0,0.05);">
+                    الاغنيه دي محدش يستاهلها غيرك ومعموله عشانك😍
+                </p>
+            </div>
+
+            <p style="font-size: 0.75rem; color: #888; margin-bottom: 10px;"></p>
+            <button class="btn-style" onclick="goToPage(8)">جاهز للاختبار؟ وريني شطارتك بقا 🧠⚡</button>
+        </div>
+
+        <!-- الصفحة 8 (الجديدة): صفحة الاختبار الرومانسي -->
+        <div class="view-page" id="page-8">
+            <div class="intro-heart" style="font-size: 50px;">🧠💖</div>
+            <h2 class="page-title" style="font-size: 1.6rem;">اختبر حبك وشطارتك!</h2>
+            <p class="page-subtitle" style="font-weight: 700; color: var(--text-dark); margin-bottom: 15px; font-size: 1rem;">
+                تفتكر.. أنهي أكتر صورة من التلاتة دول أنا بحبها وبتفرحني أوي؟ 🤔👇
+            </p>
+            
+            <div class="quiz-options-container">
+                <div class="quiz-option" id="q-opt-1" onclick="checkAnswer(1)">
+                    <img src="photo1.jpg" alt="صورة 1" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+1'">
+                    <div class="quiz-label">الصورة الأولى</div>
+                </div>
+                <div class="quiz-option" id="q-opt-2" onclick="checkAnswer(2)">
+                    <img src="photo2.jpg" alt="صورة 2" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+2'">
+                    <div class="quiz-label">الصورة الثانية</div>
+                </div>
+                <div class="quiz-option" id="q-opt-3" onclick="checkAnswer(3)">
+                    <img src="photo3.jpg" alt="صورة 3" onerror="this.src='https://via.placeholder.com/150/ffeaa7/d63031?text=الصورة+3'">
+                    <div class="quiz-label">الصورة الثالثة</div>
+                </div>
+            </div>
+
+            <div id="quiz-result-msg" style="margin-top: 15px; font-weight: 800; min-height: 30px; font-size: 1.15rem;"></div>
+
+            <!-- الزرار مخفي وهيظهر بس لما يجاوب صح -->
+            <button class="btn-style" id="btnGoToEnd" style="display: none; background: linear-gradient(135deg, #2ed573, #26af58);" onclick="goToPage(9)">يلا لأخر صفحة يحبيبي 💖</button>
+        </div>
+
+        <!-- الصفحة 9: النهاية -->
+        <div class="view-page" id="page-9">
+            <div class="intro-heart" style="font-size: 60px;">👩‍❤️‍👨</div>
+            <h2 class="page-title" style="font-size: 1.8rem;">يارب أكون عرفت أفرحك!</h2>
+            <p class="page-subtitle">كل همي في دنيتي إني أشوف الابتسامة رجعت لوشك الجميل يا روحي وتكون فكيت خالص.. قولي بقا النتيجة إيه؟</p>
+            <button class="btn-style btn-success-end" onclick="finishTherapy(true)">تم القضاء على الخنقة بنجاح 🎉</button>
+            <button class="btn-style btn-fail-end" onclick="finishTherapy(false)">فشلت المحاولة للأسف 💔</button>
+        </div>
+
+        <div class="footer-logo">صُنع بكل حب ودلع لعيون لولي ❤️</div>
+    </div>
+
+    <script>
+        function goToPage(pageNumber) {
+            const pages = document.querySelectorAll('.view-page');
+            pages.forEach(page => page.classList.remove('active'));
+            const targetPage = document.getElementById(`page-${pageNumber}`);
+            if (targetPage) targetPage.classList.add('active');
+        }
+
+        function startFlow() { goToPage(2); runFianceAnalysis(); }
+
+        function runFianceAnalysis() {
+            const bar = document.getElementById('loadingBar');
+            const status = document.getElementById('loadingStatusText');
+            const loaderIcon = document.getElementById('loaderIcon');
+            const btnGo = document.getElementById('btnGoToTherapy');
+
+            bar.style.width = '0%'; btnGo.style.display = 'none';
+            loaderIcon.innerText = '📡'; loaderIcon.style.animation = 'rotate 2s linear infinite';
+
+            setTimeout(() => { bar.style.width = '35%'; status.innerText = 'جاري الاتصال بـ زوزتي... 📡'; loaderIcon.innerText = '📲'; }, 500);
+            setTimeout(() => { bar.style.width = '70%'; status.innerText = 'جاري فحص الحالة النفسية لزوزتي... 🧠⚡'; loaderIcon.innerText = '🔍'; }, 2500);
+            setTimeout(() => {
+                bar.style.width = '100%'; status.innerHTML = 'تم العثور على شخص مخنوق وعابس 😔💔';
+                loaderIcon.innerText = '🚨'; loaderIcon.style.animation = 'pulse 1s infinite';
+                btnGo.style.display = 'block'; btnGo.style.animation = 'popIn 0.5s ease-out';
+            }, 5000);
+        }
+
+        function openGift(element, rewardMessage) {
+            if (element.classList.contains('opened')) return;
+            element.classList.add('opened');
+            element.querySelector('.gift-reward-text').innerText = rewardMessage;
+            element.style.animation = 'shake 0.5s ease';
+        }
+
+        // تكبير وعرض الصور مع كابشن خاص بكل صورة
+        function zoomPhoto(imgSrc, caption) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox-caption').innerText = caption;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        // إيقاف تشغيل الفيديو عند الانتقال لصفحة الأغنية
+        function pauseVideoAndGoNext() {
+            const video = document.getElementById('myVideo');
+            if (video) video.pause();
+            goToPage(7);
+        }
+
+        // منطق الاختبار الرومانسي (الكويز)
+        let quizSolved = false;
+        function checkAnswer(selectedOption) {
+            if (quizSolved) return; // منع اللعب بعد حل السؤال صح
+            
+            const opt1 = document.getElementById('q-opt-1');
+            const opt2 = document.getElementById('q-opt-2');
+            const opt3 = document.getElementById('q-opt-3');
+            const resultMsg = document.getElementById('quiz-result-msg');
+            const nextBtn = document.getElementById('btnGoToEnd');
+
+            // ريست للألوان
+            opt1.classList.remove('correct', 'wrong');
+            opt2.classList.remove('correct', 'wrong');
+            opt3.classList.remove('correct', 'wrong');
+
+            if (selectedOption === 2) {
+                // إجابة صحيحة (الصورة التانية)
+                quizSolved = true;
+                opt2.classList.add('correct');
+                resultMsg.innerHTML = '<span style="color: #2ed573; text-shadow: 1px 1px 2px rgba(0,0,0,0.05);">إجابة صحيييحة! 🎉 انت تستاهل بوسة 😘💋</span>';
+                
+                // تشغيل تأثير الاحتفال والزينة
+                triggerConfettiCelebration();
+                
+                // فتح مودال الاحتفال اللطيف
+                openModal(
+                    'صح يا قلبييي! 🎉💋', 
+                    'تستاهل أحلى وأطول بوسة في الدنيا عشان حافظ بنوتك ، موواااه 😘❤️', 
+                    '👑', 
+                    'أنا مليش حل كدا كدا 😂'
+                );
+
+                // إظهار زرار الانتقال للصفحة الأخيرة
+                nextBtn.style.display = 'block';
+                nextBtn.style.animation = 'popIn 0.5s ease-out';
+            } else {
+                // إجابة خاطئة
+                const wrongOpt = document.getElementById(`q-opt-${selectedOption}`);
+                wrongOpt.classList.add('wrong');
+                resultMsg.innerHTML = '<span style="color: var(--dark-rose);">لأ مش دي فكر تاني يا لولي! 🤔💔</span>';
+                
+                openModal(
+                    'غلط يا كوتي! 😂💔', 
+                    'حاول تركز تاني كدة.. معقولة مش عارف أكتر صورة بحبها يعني ؟ ركز يا لولي 😉', 
+                    '🤦‍♀️', 
+                    'حاضر هركز والمرة دي هجيبها 😂'
+                );
+            }
+        }
+
+        // تأثير تساقط الزينة (Confetti) عند الإجابة الصحيحة
+        function triggerConfettiCelebration() {
+            const colors = ['#ff7675', '#fdcb6e', '#00cec9', '#6c5ce7', '#e84393', '#2ed573'];
+            const container = document.getElementById('bgHearts');
+            
+            for (let i = 0; i < 70; i++) {
+                const conf = document.createElement('div');
+                conf.style.position = 'fixed';
+                conf.style.width = (Math.random() * 8 + 6) + 'px';
+                conf.style.height = (Math.random() * 15 + 8) + 'px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.top = '-20px';
+                conf.style.left = (Math.random() * 100) + 'vw';
+                conf.style.zIndex = '9999';
+                conf.style.borderRadius = '3px';
+                conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                const speed = Math.random() * 4 + 3;
+                const drift = Math.random() * 6 - 3;
+                
+                document.body.appendChild(conf);
+                
+                let topPos = -20;
+                let leftPos = parseFloat(conf.style.left);
+                
+                const interval = setInterval(() => {
+                    topPos += speed;
+                    leftPos += drift;
+                    conf.style.top = topPos + 'px';
+                    conf.style.left = leftPos + 'vw';
+                    
+                    if (topPos > window.innerHeight) {
+                        clearInterval(interval);
+                        conf.remove();
+                    }
+                }, 16);
+            }
+        }
+
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-3deg); } 50% { transform: translateX(5px) rotate(3deg); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }`;
+        document.head.appendChild(styleSheet);
+
+        function openModal(title, text, emoji, btnText = 'قشطة 🥰') {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalText').innerText = text;
+            document.getElementById('modalEmoji').innerText = emoji;
+            document.getElementById('modalBtn').innerText = btnText;
+            document.getElementById('customModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('customModal').style.display = 'none'; }
+
+        function finishTherapy(success) {
+            if (success) {
+                openModal(
+                    'تم القضاء على الخنقة بنجاح! 🎉',
+                    'الحمد لله يروحي وقلبي! ضحكتك ورضاك هما أهم حاجة عندي في الدنيا دي كلها. خليك علطول مبسوط عشان بنوتك تفضل مبسوطة بفرحتك! بحبك أوي يا أحلى زوزتي في الدنيا. 🥰❤️',
+                    '🏆',
+                    'بحبك يا نونتي ❤️'
+                );
+            } else {
+                openModal(
+                    'لاااا بقا! 👮‍♀️',
+                    'الموضوع كدة تخطى حدود الويب سايت.. أنت كدة تيجيلي واتساب حالاً وسيب الباقي عليا أنا عشان هصالحك بطريقتي وعافية ورضا! مستنياك يا لولي 😂❤️',
+                    '📱',
+                    'هجيلك واتس أهو 😂'
+                );
+            }
+        }
+
+        // تساقط القلوب المستمر في الخلفية
+        const heartsContainer = document.getElementById('bgHearts');
+        const heartSymbols = ['❤️', '💖', '💝', '✨', '🌸', '👩‍❤️‍👨'];
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            heartsContainer.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 8000);
+        }
+        setInterval(createFloatingHeart, 500);
+
+        // التنبيهات الجانبية المتباعدة
+        const girlsMessages = [
+            "بحبك أوي يا لولي يا دنيتي كلها.. ❤️",
+            "فك التكشيرة دي بقا يا لولي الاااه! 😘",
+            "يارب أشوفك كويس دايماً ومبسوط يا روحي دا فرحتك فرحتي! 🥰",
+        ];
+        let messageIndex = 0;
+
+        function showNotificationFromGirl() {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.classList.add('custom-toast');
+            toast.innerHTML = `<div class="toast-icon">💌</div><div class="toast-body"><div class="toast-title">رسالة من بنوتك 💖</div><div class="toast-message">اضغط لقراءة الرسالة اللطيفة...</div></div>`;
+            
+            const currentMessage = girlsMessages[messageIndex];
+            toast.onclick = function() {
+                openModal('رسالة خاصة من بنوتك 🤫❤️', currentMessage, '💬', 'ابتسمت خلاص 🥰');
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            };
+
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.add('show'); }, 100);
+            setTimeout(() => {
+                if (toast.parentNode) { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); }
+            }, 6000);
+            messageIndex = (messageIndex + 1) % girlsMessages.length;
+        }
+
+        setTimeout(() => {
+            showNotificationFromGirl();
+            setInterval(showNotificationFromGirl, 45000); 
+        }, 15000); 
+
+    </script>
+</body>
+</html>
